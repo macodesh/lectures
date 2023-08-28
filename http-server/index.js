@@ -1,5 +1,6 @@
 const http = require("node:http"); // módulo nativo do node para lidar com requisições http
 const fs = require("node:fs").promises; // módulo do node para trabalhar com arquivos
+const { OK, CREATED } = require("./httpStatus"); // importa as constantes com os status de código
 
 const host = "localhost"; // endereço URL do servidor
 const port = 3000; // porta que vai rodar o servidor
@@ -9,7 +10,7 @@ const port = 3000; // porta que vai rodar o servidor
 const requestListener = (_req, res) => {
   // req é o objeto que vem de fora pra dentro da API
   // res é objeto que sai da API pra fora
-  res.writeHead(200); // devolve no cabeçalho o status 200
+  res.writeHead(OK); // devolve no cabeçalho o status 200
   res.end("Meu primeiro servidor"); // finaliza a resposta devolvendo um conteúdo de texto
 };
 
@@ -18,14 +19,14 @@ const helloWorld = (_req, res) => {
   message = JSON.stringify(message); // transforma o objeto em JSON
 
   res.setHeader("Content-Type", "application/json"); // define o retorno como conteúdo JSON
-  res.writeHead(200);
+  res.writeHead(OK);
   res.end(message);
 };
 
 // Envia HTML através do endpoint
 const sendHtmlPage = (_req, res) => {
   res.setHeader("Content-Type", "text/html"); //define o retorno como de tipo html
-  res.writeHead(200);
+  res.writeHead(OK);
 
   res.end(`
 <!DOCTYPE html>
@@ -47,7 +48,7 @@ const sendHtmlFile = async (_req, res) => {
   const page = await fs.readFile(__dirname + "/index.html"); // caminho do arquivo html
 
   res.setHeader("Content-Type", "text/html");
-  res.writeHead(200); // OK
+  res.writeHead(OK); // igual á código de status 200
 
   res.end(page);
 };
@@ -60,7 +61,7 @@ const listTodo = async (_req, res) => {
   const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   res.setHeader("Content-Type", "application/json");
-  res.writeHead(200);
+  res.writeHead(OK);
   res.end(jsonFile);
 };
 
@@ -84,7 +85,7 @@ const createTodo = async (req, res) => {
     await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks));
 
     res.setHeader("Content-Type", "application/json");
-    res.writeHead(201); // CREATED
+    res.writeHead(CREATED); // igual à código de status 201
     res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
     // sobrescreve o arquivo original com o array atualizado
   });
