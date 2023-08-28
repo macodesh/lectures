@@ -55,10 +55,9 @@ const sendHtmlFile = async (_req, res) => {
 // Métodos para lidar com arquivos JSON
 
 // GET /todo
-const listTodo = (_req, res) => {
+const listTodo = async (_req, res) => {
   // Leitura de arquivo json
-  let jsonFile;
-  fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
+  const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   res.setHeader("Content-Type", "application/json");
   res.writeHead(200);
@@ -68,27 +67,26 @@ const listTodo = (_req, res) => {
 // POST /todo
 const createTodo = async (req, res) => {
   let data = ""; // variável auxiliar para receber os dados da requisição
+  const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   // recebe os dados da requisição, transforma em string e salva em data
   req.on("data", (chunk) => {
     data += chunk.toString();
   });
 
-  req.on("end", () => {
-    let jsonFile;
-    fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
-
+  req.on("end", async () => {
     const newTask = JSON.parse(data); // transforma os dados da requisição em um objeto, com os dados para criar uma nova tarefa
     const tasks = JSON.parse(jsonFile); // transformando o arquivo JSON original em array de objetos JavaScript
 
     newTask.id = tasks.length + 1; // lê os arquivos e define o id como quantidade + 1
     tasks.push(newTask); // inclui a tarefa nova que veio da requisição no array de objetos
 
-    fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks)).then(() => {
-      res.setHeader("Content-Type", "application/json");
-      res.writeHead(201); // CREATED
-      res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
-    }); // sobrescreve o arquivo original com o array atualizado
+    await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks));
+
+    res.setHeader("Content-Type", "application/json");
+    res.writeHead(201); // CREATED
+    res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
+    // sobrescreve o arquivo original com o array atualizado
   });
 };
 
@@ -108,10 +106,10 @@ const server = http.createServer(async (req, res) => {
     await sendHtmlFile(req, res);
   }
   if (req.url === "/todo" && req.method === "GET") {
-    listTodo(req, res);
+    await listTodo(req, res);
   }
   if (req.url === "/todo" && req.method === "POST") {
-    createTodo(req, res);
+    await createTodo(req, res);
   }
 });
 
