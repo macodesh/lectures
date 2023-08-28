@@ -55,8 +55,17 @@ const sendHtmlFile = async (_req, res) => {
 // Cria o servidor HTTP
 const server = http.createServer(async (req, res) => {
   if (req.url === "/" && req.method === "GET") {
-    // se a url for "/" e o método for "GET"
+    // se a url for "/" e o método for "GET" (deve estar maiúsculo)
     requestListener(req, res);
+  }
+  if (req.url === "/hello" && req.method === "GET") {
+    helloWorld(req, res);
+  }
+  if (req.url === "/html" && req.method === "GET") {
+    sendHtmlPage(req, res);
+  }
+  if (req.url === "/page" && req.method === "GET") {
+    await sendHtmlFile(req, res);
   }
 });
 
