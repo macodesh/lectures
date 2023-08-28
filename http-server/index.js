@@ -54,12 +54,12 @@ const sendHtmlFile = async (_req, res) => {
 
 // Métodos para lidar com arquivos JSON
 
-// Leitura de arquivo json
-let jsonFile;
-fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
-
 // GET /todo
 const listTodo = (_req, res) => {
+  // Leitura de arquivo json
+  let jsonFile;
+  fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
+
   res.setHeader("Content-Type", "application/json");
   res.writeHead(200);
   res.end(jsonFile);
@@ -75,6 +75,9 @@ const createTodo = async (req, res) => {
   });
 
   req.on("end", () => {
+    let jsonFile;
+    fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
+
     const newTask = JSON.parse(data); // transforma os dados da requisição em um objeto, com os dados para criar uma nova tarefa
     const tasks = JSON.parse(jsonFile); // transformando o arquivo JSON original em array de objetos JavaScript
 
