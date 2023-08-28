@@ -55,7 +55,8 @@ const sendHtmlFile = async (_req, res) => {
 // Métodos para lidar com arquivos JSON
 
 // Leitura de arquivo json
-const jsonFile = await fs.readFile(__dirname + "/todo.json");
+let jsonFile;
+fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
 
 // GET /todo
 const listTodo = async (_req, res) => {
