@@ -1,7 +1,7 @@
 const http = require("node:http"); // módulo nativo do node para lidar com requisições http
 
 const host = "localhost"; // endereço URL do servidor
-const port = 8000; // porta que vai rodar o servidor
+const port = 3000; // porta que vai rodar o servidor
 
 // Função para ouvir as requisições, chamado "listener"
 // Determina o que acontece quando você acessa uma rota do servidor
