@@ -43,6 +43,7 @@ const sendHtmlPage = (_req, res) => {
 };
 
 const sendHtmlFile = async (_req, res) => {
+  // fs.readFile lê arquivos de maneira assíncrona (mais performático)
   const page = await fs.readFile(__dirname + "/index.html"); // caminho do arquivo html
 
   res.setHeader("Content-Type", "text/html");
@@ -52,7 +53,12 @@ const sendHtmlFile = async (_req, res) => {
 };
 
 // Cria o servidor HTTP
-const server = http.createServer(sendHtmlFile);
+const server = http.createServer(async (req, res) => {
+  if (req.url === "/" && req.method === "GET") {
+    // se a url for "/" e o método for "GET"
+    requestListener(req, res);
+  }
+});
 
 // Inicia o servidor
 server.listen(port, host, () => {
