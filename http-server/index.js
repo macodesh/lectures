@@ -59,7 +59,7 @@ let jsonFile;
 fs.readFile(__dirname + "/todo.json").then((data) => (jsonFile = data));
 
 // GET /todo
-const listTodo = async (_req, res) => {
+const listTodo = (_req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.writeHead(200);
   res.end(jsonFile);
@@ -74,18 +74,18 @@ const createTodo = async (req, res) => {
     data += chunk.toString();
   });
 
-  req.on("end", async () => {
+  req.on("end", () => {
     const newTask = JSON.parse(data); // transforma os dados da requisição em um objeto, com os dados para criar uma nova tarefa
     const tasks = JSON.parse(jsonFile); // transformando o arquivo JSON original em array de objetos JavaScript
 
     newTask.id = tasks.length + 1; // lê os arquivos e define o id como quantidade + 1
     tasks.push(newTask); // inclui a tarefa nova que veio da requisição no array de objetos
 
-    await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks)); // sobrescreve o arquivo original com o array atualizado
-
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(201); // CREATED
-    res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
+    fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks)).then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.writeHead(201); // CREATED
+      res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
+    }); // sobrescreve o arquivo original com o array atualizado
   });
 };
 
@@ -105,10 +105,10 @@ const server = http.createServer(async (req, res) => {
     await sendHtmlFile(req, res);
   }
   if (req.url === "/todo" && req.method === "GET") {
-    await listTodo(req, res);
+    listTodo(req, res);
   }
   if (req.url === "/todo" && req.method === "POST") {
-    await createTodo(req, res);
+    createTodo(req, res);
   }
 });
 
