@@ -1,14 +1,14 @@
 [
   {
-    "id": "1",
-    "tasks": "Tarefa 1"
+    "id": 1,
+    "task": "Tarefa 1"
   },
   {
-    "id": "2",
-    "tasks": "Tarefa 2"
+    "id": 2,
+    "task": "Tarefa 2"
   },
   {
-    "id": "3",
-    "tasks": "Tarefa 3"
+    "id": 3,
+    "task": "Tarefa 3"
   }
 ]
