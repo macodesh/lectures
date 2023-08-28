@@ -1,4 +1,5 @@
 const http = require("node:http"); // módulo nativo do node para lidar com requisições http
+const fs = require("node:fs").promises; // módulo do node para trabalhar com arquivos
 
 const host = "localhost"; // endereço URL do servidor
 const port = 3000; // porta que vai rodar o servidor
@@ -41,8 +42,17 @@ const sendHtmlPage = (_req, res) => {
   `);
 };
 
+const sendHtmlFile = async (_req, res) => {
+  const page = await fs.readFile(__dirname + "/index.html"); // caminho do arquivo html
+
+  res.setHeader("Content-Type", "text/html");
+  res.writeHead(200); // OK
+
+  res.end(page);
+};
+
 // Cria o servidor HTTP
-const server = http.createServer(sendHtmlPage);
+const server = http.createServer(sendHtmlFile);
 
 // Inicia o servidor
 server.listen(port, host, () => {
