@@ -52,6 +52,16 @@ const sendHtmlFile = async (_req, res) => {
   res.end(page);
 };
 
+// Métodos para lidar com arquivos JSON
+const listTodo = async (_req, res) => {
+  const jsonFile = await fs.readFile(__dirname + "/todo.json");
+
+  res.setHeader("Content-Type", "application/json");
+  res.writeHead(200);
+
+  res.end(jsonFile);
+};
+
 // Cria o servidor HTTP
 const server = http.createServer(async (req, res) => {
   if (req.url === "/" && req.method === "GET") {
@@ -66,6 +76,9 @@ const server = http.createServer(async (req, res) => {
   }
   if (req.url === "/page" && req.method === "GET") {
     await sendHtmlFile(req, res);
+  }
+  if (req.url === "/todo" && req.method === "GET") {
+    await listTodo(req, res);
   }
 });
 
