@@ -28,7 +28,7 @@ const sendHtmlPage = (_req, res) => {
   res.writeHead(200);
 
   res.end(`
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
