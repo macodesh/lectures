@@ -20,6 +20,7 @@ const helloWorld = (_req, res) => {
 
   res.setHeader("Content-Type", "application/json"); // define o retorno como conteúdo JSON
   res.writeHead(OK);
+
   res.end(message);
 };
 
@@ -62,6 +63,7 @@ const listTodo = async (_req, res) => {
 
   res.setHeader("Content-Type", "application/json");
   res.writeHead(OK);
+
   res.end(jsonFile);
 };
 
@@ -86,6 +88,7 @@ const createTodo = async (req, res) => {
 
     res.setHeader("Content-Type", "application/json");
     res.writeHead(CREATED); // igual à código de status 201
+
     res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
     // sobrescreve o arquivo original com o array atualizado
   });
