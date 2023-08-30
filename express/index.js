@@ -66,7 +66,7 @@ app.put("/todo/:id", async (req, res) => {
 });
 
 // DELETE /todo
-app.delete("/todo:id", async (req, res) => {
+app.delete("/todo/:id", async (req, res) => {
   const { id } = req.params;
 
   const tasks = await readJson();
