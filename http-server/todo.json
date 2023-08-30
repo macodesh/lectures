@@ -1,1 +1,5 @@
-[{"id":1,"task":"Tarefa 1"},{"id":2,"task":"Tarefa 2"},{"id":3,"task":"Tarefa 3"},{"task":"Tarefa Nova","id":4}]
+[
+  { "id": 1, "task": "Tarefa 1" },
+  { "id": 2, "task": "Tarefa 2" },
+  { "id": 3, "task": "Tarefa 3" }
+]
