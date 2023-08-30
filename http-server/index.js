@@ -158,7 +158,7 @@ const deleteTask = async (req, res) => {
     const tasks = JSON.parse(jsonFile);
 
     // Remover a tarefa do array
-    const updatedTasks = tasks.filter((task) => task.id === idToDelete.id);
+    const updatedTasks = tasks.filter((task) => task.id !== idToDelete.id);
 
     await fs.writeFile(__dirname + "/todo.json", JSON.stringify(updatedTasks));
 
