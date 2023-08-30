@@ -12,7 +12,7 @@ const CONFLICT = 409;
 // Erro interno do servidor
 const INTERNAL_ERROR = 500;
 
-module.export = {
+module.exports = {
   OK,
   CREATED,
   NO_CONTENT,
@@ -20,4 +20,5 @@ module.export = {
   UNAUTHORIZED,
   NOT_FOUND,
   CONFLICT,
+  INTERNAL_ERROR,
 };
