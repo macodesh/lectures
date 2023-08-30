@@ -139,7 +139,7 @@ const updateTodo = async (req, res) => {
 
     res.setHeader("Content-Type", "application/json");
     res.writeHead(200);
-    res.end(tasksUpdated);
+    res.end(JSON.stringify(tasksUpdated));
   });
 };
 
