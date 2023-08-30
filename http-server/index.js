@@ -107,7 +107,7 @@ const createTodo = async (req, res) => {
 // U do CRUD = Update
 const updateTodo = async (req, res) => {
   let data = "";
-  const jsonFile = await fs.readFile(__dirname + "todo.json");
+  const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   req.on("data", (chunk) => {
     data += chunk.toString();
