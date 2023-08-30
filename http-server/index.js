@@ -145,9 +145,9 @@ const updateTodo = async (req, res) => {
 
 // DELETE /todo
 // D do CRUD = Delete
-const deleteTask = (req, res) => {
+const deleteTask = async (req, res) => {
   let data = "";
-  const jsonFile = fs.readFile(__dirname + "/todo.json");
+  const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   req.on("data", (chunk) => {
     data += chunk.toString();
