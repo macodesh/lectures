@@ -113,32 +113,34 @@ const updateTodo = async (req, res) => {
     data += chunk.toString();
   });
 
-  const dataToUpdate = JSON.parse(data);
-  // { id: 99, task: "Teste" }
-  const tasks = JSON.parse(jsonFile);
+  req.on("end", async () => {
+    const dataToUpdate = JSON.parse(data);
+    // { id: 99, task: "Teste" }
+    const tasks = JSON.parse(jsonFile);
 
-  // Iterando sobre cada task do arquivo
-  const tasksUpdated = tasks.map((task) => {
-    // se a task atual tiver id igual ao id passado na requisição
-    if (task.id === dataToUpdate.id) {
-      // salva os dados atualizados no lugar dela
-      return dataToUpdate;
-    } else {
-      // se não, ele só retorna a task sem alterar nada
-      return task;
-    }
+    // Iterando sobre cada task do arquivo
+    const tasksUpdated = tasks.map((task) => {
+      // se a task atual tiver id igual ao id passado na requisição
+      if (task.id === dataToUpdate.id) {
+        // salva os dados atualizados no lugar dela
+        return dataToUpdate;
+      } else {
+        // se não, ele só retorna a task sem alterar nada
+        return task;
+      }
+    });
+
+    await fs.writeFile(
+      __dirname + "/todo.json",
+      JSON.stringify(tasksUpdated),
+      "utf-8",
+      2
+    );
+
+    res.setHeader("Content-Type", "application/json");
+    res.writeHead(200);
+    res.end(tasksUpdated);
   });
-
-  await fs.writeFile(
-    __dirname + "/todo.json",
-    JSON.stringify(tasksUpdated),
-    "utf-8",
-    2
-  );
-
-  res.setHeader("Content-Type", "application/json");
-  res.writeHead(200);
-  res.end(tasksUpdated);
 };
 
 // Cria o servidor HTTP
