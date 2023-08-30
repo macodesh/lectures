@@ -1,6 +1,6 @@
 const http = require("node:http"); // módulo nativo do node para lidar com requisições http
 const fs = require("node:fs").promises; // módulo do node para trabalhar com arquivos
-const { OK, CREATED } = require("./httpStatus"); // importa as constantes com os status de código
+const { OK, CREATED, NO_CONTENT } = require("./httpStatus"); // importa as constantes com os status de código
 
 const host = "localhost"; // endereço URL do servidor
 const port = 3000; // porta que vai rodar o servidor
@@ -119,7 +119,7 @@ const updateTodo = async (req, res) => {
     const tasks = JSON.parse(jsonFile);
 
     // Iterando sobre cada task do arquivo
-    const tasksUpdated = tasks.map((task) => {
+    const updatedTasks = tasks.map((task) => {
       // se a task atual tiver id igual ao id passado na requisição
       if (task.id === dataToUpdate.id) {
         // salva os dados atualizados no lugar dela
@@ -132,14 +132,39 @@ const updateTodo = async (req, res) => {
 
     await fs.writeFile(
       __dirname + "/todo.json",
-      JSON.stringify(tasksUpdated),
+      JSON.stringify(updatedTasks),
       "utf-8",
       2
     );
 
     res.setHeader("Content-Type", "application/json");
     res.writeHead(200);
-    res.end(JSON.stringify(tasksUpdated));
+    res.end(JSON.stringify(updatedTasks));
+  });
+};
+
+// DELETE /todo
+// D do CRUD = Delete
+const deleteTask = (req, res) => {
+  let data = "";
+  const jsonFile = fs.readFile(__dirname + "/todo.json");
+
+  req.on("data", (chunk) => {
+    data += chunk.toString();
+  });
+
+  req.on("end", async () => {
+    const idToDelete = JSON.parse(data).id;
+    const tasks = JSON.parse(jsonFile);
+
+    // Remover a tarefa do array
+    const updatedTasks = tasks.filter((task) => task.id === idToDelete);
+
+    await fs.writeFile(__dirname + "/todo.json", JSON.stringify(updatedTasks));
+
+    res.setHeader("Content-Type", "application/json");
+    res.writeHead(NO_CONTENT);
+    res.end();
   });
 };
 
@@ -166,6 +191,9 @@ const server = http.createServer(async (req, res) => {
   }
   if (req.url === "/todo" && req.method === "PUT") {
     await updateTodo(req, res);
+  }
+  if (req.url === "/todo" && req.method === "DELETE") {
+    await deleteTask(req, res);
   }
 });
 
