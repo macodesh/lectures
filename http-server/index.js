@@ -162,6 +162,9 @@ const server = http.createServer(async (req, res) => {
   if (req.url === "/todo" && req.method === "POST") {
     await createTodo(req, res);
   }
+  if (req.url === "/todo" && req.method === "PUT") {
+    await updateTodo(req, res);
+  }
 });
 
 // Inicia o servidor
