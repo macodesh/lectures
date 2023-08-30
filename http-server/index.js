@@ -85,7 +85,7 @@ const createTodo = async (req, res) => {
     newTask.id = tasks.length + 1; // lê a quantidade de tarefas nos arquivos e define o id como quantidade + 1
     tasks.push(newTask); // inclui a tarefa nova que veio da requisição no array de objetos
 
-    await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks));
+    await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks), null, 2); // função para escrever os dados em um arquivo (path, dados, modo, formatação)
 
     res.setHeader("Content-Type", "application/json");
     res.writeHead(CREATED); // igual a código de status 201
