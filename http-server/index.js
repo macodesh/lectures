@@ -9,7 +9,7 @@ const port = 3000; // porta que vai rodar o servidor
 // Determina o que acontece quando você acessa uma rota do servidor
 const requestListener = (_req, res) => {
   // req é o objeto que vem de fora pra dentro da API
-  // res é objeto que sai da API pra fora
+  // res é o objeto que sai da API pra fora
   res.writeHead(OK); // devolve no cabeçalho o status 200
   res.end("Meu primeiro servidor"); // finaliza a resposta devolvendo um conteúdo de texto
 };
@@ -26,7 +26,7 @@ const helloWorld = (_req, res) => {
 
 // Envia HTML através do endpoint
 const sendHtmlPage = (_req, res) => {
-  res.setHeader("Content-Type", "text/html"); //define o retorno como de tipo html
+  res.setHeader("Content-Type", "text/html"); // define o retorno como de tipo HTML
   res.writeHead(OK);
 
   res.end(`
@@ -46,10 +46,10 @@ const sendHtmlPage = (_req, res) => {
 
 const sendHtmlFile = async (_req, res) => {
   // fs.readFile lê arquivos de maneira assíncrona (mais performático)
-  const page = await fs.readFile(__dirname + "/index.html"); // caminho do arquivo html
+  const page = await fs.readFile(__dirname + "/index.html"); // caminho do arquivo HTML
 
   res.setHeader("Content-Type", "text/html");
-  res.writeHead(OK); // igual á código de status 200
+  res.writeHead(OK); // igual a código de status 200
 
   res.end(page);
 };
@@ -58,7 +58,7 @@ const sendHtmlFile = async (_req, res) => {
 
 // GET /todo
 const listTodo = async (_req, res) => {
-  // Leitura de arquivo json
+  // Leitura de arquivo JSON
   const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   res.setHeader("Content-Type", "application/json");
@@ -73,6 +73,7 @@ const createTodo = async (req, res) => {
   const jsonFile = await fs.readFile(__dirname + "/todo.json");
 
   // recebe os dados da requisição, transforma em string e salva em data
+  // "chunk" são os dados em formato binário, sem nenhuma formatação
   req.on("data", (chunk) => {
     data += chunk.toString();
   });
@@ -81,15 +82,15 @@ const createTodo = async (req, res) => {
     const newTask = JSON.parse(data); // transforma os dados da requisição em um objeto, com os dados para criar uma nova tarefa
     const tasks = JSON.parse(jsonFile); // transformando o arquivo JSON original em array de objetos JavaScript
 
-    newTask.id = tasks.length + 1; // lê os arquivos e define o id como quantidade + 1
+    newTask.id = tasks.length + 1; // lê a quantidade de tarefas nos arquivos e define o id como quantidade + 1
     tasks.push(newTask); // inclui a tarefa nova que veio da requisição no array de objetos
 
     await fs.writeFile(__dirname + "/todo.json", JSON.stringify(tasks));
 
     res.setHeader("Content-Type", "application/json");
-    res.writeHead(CREATED); // igual à código de status 201
+    res.writeHead(CREATED); // igual a código de status 201
 
-    res.end(JSON.stringify(newTask)); // devolve o json da nova tarefa
+    res.end(JSON.stringify(newTask)); // devolve o JSON da nova tarefa
     // sobrescreve o arquivo original com o array atualizado
   });
 };
