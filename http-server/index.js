@@ -55,8 +55,10 @@ const sendHtmlFile = async (_req, res) => {
 };
 
 // Métodos para lidar com arquivos JSON
+// CRUD = Create, Read, Update e Delete
 
 // GET /todo
+// R do CRUD = READ
 const listTodo = async (_req, res) => {
   // Leitura de arquivo JSON
   const jsonFile = await fs.readFile(__dirname + "/todo.json");
@@ -68,6 +70,7 @@ const listTodo = async (_req, res) => {
 };
 
 // POST /todo
+// C do CRUD = CREATE
 const createTodo = async (req, res) => {
   let data = ""; // variável auxiliar para receber os dados da requisição
   const jsonFile = await fs.readFile(__dirname + "/todo.json");
@@ -85,6 +88,7 @@ const createTodo = async (req, res) => {
     newTask.id = tasks.length + 1; // lê a quantidade de tarefas nos arquivos e define o id como quantidade + 1
     tasks.push(newTask); // inclui a tarefa nova que veio da requisição no array de objetos
 
+    // sobrescreve o arquivo original com o array atualizado
     await fs.writeFile(
       __dirname + "/todo.json",
       JSON.stringify(tasks),
@@ -96,8 +100,45 @@ const createTodo = async (req, res) => {
     res.writeHead(CREATED); // igual a código de status 201
 
     res.end(JSON.stringify(newTask)); // devolve o JSON da nova tarefa
-    // sobrescreve o arquivo original com o array atualizado
   });
+};
+
+// PUT /todo
+// U do CRUD = Update
+const updateTodo = async (req, res) => {
+  let data = "";
+  const jsonFile = await fs.readFile(__dirname + "todo.json");
+
+  req.on("data", (chunk) => {
+    data += chunk.toString();
+  });
+
+  const dataToUpdate = JSON.parse(data);
+  // { id: 99, task: "Teste" }
+  const tasks = JSON.parse(jsonFile);
+
+  // Iterando sobre cada task do arquivo
+  const tasksUpdated = tasks.map((task) => {
+    // se a task atual tiver id igual ao id passado na requisição
+    if (task.id === dataToUpdate.id) {
+      // salva os dados atualizados no lugar dela
+      return dataToUpdate;
+    } else {
+      // se não, ele só retorna a task sem alterar nada
+      return task;
+    }
+  });
+
+  await fs.writeFile(
+    __dirname + "/todo.json",
+    JSON.stringify(tasksUpdated),
+    "utf-8",
+    2
+  );
+
+  res.setHeader("Content-Type", "application/json");
+  res.writeHead(200);
+  res.end(tasksUpdated);
 };
 
 // Cria o servidor HTTP
